@@ -26,32 +26,20 @@ tar -xzf fcgi.tar.gz
 cd $(ls fcgi*/ -d | head -n 1)
 ```
 
-Fix FastCGI
+Patch FastCGI
 ```bash
-cd include
-vi fcgio.h
-```
-
-Insert `#include <stdio.h>` after `#include <iostream>`.
-```c++
-// FITNESS FOR A PARTICULAR PURPOSE.  If it breaks, you get to keep
-// both halves.
-
-#ifndef FCGIO_H
-#define FCGIO_H
-
-#include <iostream> // Line 33
-#include <stdio.h>  // INSERT THIS LINE
-
-#include "fcgiapp.h"
-
-#ifndef DLLAPI
-```
-
-Save and close the file.
-
-```bash
-cd ..
+patch -p0 <<EOF
+--- include/fcgio.h     2002-02-25 13:16:11.000000000 +0000
++++ include/fcgio.h     2014-07-14 01:40:07.914260118 +0000
+@@ -31,6 +31,7 @@
+ #define FCGIO_H
+ 
+ #include <iostream>
++#include <stdio.h>
+ 
+ #include "fcgiapp.h"
+ 
+EOF
 ```
 
 Build and install FastCGI
